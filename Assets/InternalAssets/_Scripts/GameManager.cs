@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
     protected GameManager(){}
     private static GameManager _instance = null;
     public event OnStateChangeHandler OnStateChange;
+    private MenuController _menuController;
     public GameState gameState { get; private set; }
 
     public static GameManager Instance
@@ -25,6 +27,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        _instance = this;
+        InitializedMenu();
+
+    }
+
+    private void InitializedMenu ()
+    {
+        _menuController = new MenuController(
+            Instantiate(PrefabManager.PrefabManager.GetPrefabByName(MenuController.UI_PREFAB_MENU_NAME))
+                .GetComponent<MenuView>());
+    }
     public void SetGameState(GameState state)
     {
         gameState = state;
