@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     private static GameManager _instance = null;
     public event OnStateChangeHandler OnStateChange;
     private MenuController _menuController;
+    private PlayerCarController _playerCarController;
     public GameState gameState { get; private set; }
 
     public static GameManager Instance
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     {
         _instance = this;
         InitializedMenu();
+        InitializedPlayer();
 
     }
 
@@ -39,6 +41,11 @@ public class GameManager : MonoBehaviour
         _menuController = new MenuController(
             Instantiate(PrefabManager.PrefabManager.GetPrefabByName(MenuController.UI_PREFAB_MENU_NAME))
                 .GetComponent<MenuView>());
+    }
+
+    private void InitializedPlayer()
+    {
+        _playerCarController = new PlayerCarController();
     }
     public void SetGameState(GameState state)
     {

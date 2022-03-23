@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICar
+public class BotCarView : BaseCar
 {
-    void Drive();
-    void Stop();
-    bool IsCrashed();
+    
 }
