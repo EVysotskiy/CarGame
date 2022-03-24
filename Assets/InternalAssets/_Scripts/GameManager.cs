@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum GameState { INTRO, MENU,PLAY }
 public delegate void OnStateChangeHandler();
@@ -9,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     protected GameManager(){}
     private static GameManager _instance = null;
+    private Context _context;
     public event OnStateChangeHandler OnStateChange;
     private MenuController _menuController;
     private PlayerCarController _playerCarController;
@@ -31,6 +29,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        _context = new Context(this);
         InitializedMenu();
         InitializedPlayer();
 
@@ -45,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     private void InitializedPlayer()
     {
-        _playerCarController = new PlayerCarController();
+        _playerCarController = new PlayerCarController(_context);
     }
     public void SetGameState(GameState state)
     {

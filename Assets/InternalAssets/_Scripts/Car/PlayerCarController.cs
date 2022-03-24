@@ -5,15 +5,17 @@ using UnityEngine;
 public class PlayerCarController : ICar
 {
     private PlayerCarView _playerCarView;
+    private IContext _context;
     private const string PREFAB_PLAYER_NAME = "PlayerCar";
-    public PlayerCarController()
+    public PlayerCarController(IContext context)
     {
+        _context = context;
         Initialized();
     }
 
     private void Initialized()
     {
-        _playerCarView = Instantiate(PrefabManager.PrefabManager.GetPrefabByName(PREFAB_PLAYER_NAME)).GetComponent<PlayerCarView>();
+        _playerCarView = _context.InstanceView(PREFAB_PLAYER_NAME).GetComponent<PlayerCarView>();
     }
 
     public void Drive()
