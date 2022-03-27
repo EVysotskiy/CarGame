@@ -3,17 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MenuController : Window
+public class MenuController : Window<MenuView>
 {
-    private MenuView _menuView { get; }
+    private MenuView _menuView;
     public const string UI_PREFAB_MENU_NAME = "MenuView";
     
-    public MenuController(MenuView menuView)
+    public MenuController(IContext context):base(context)
     {
-        _menuView = menuView;
+        Initialized();
         _menuView.OnStartPlay += OnStartPlay;
     }
-    
+
+    private void Initialized()
+    {
+        _menuView = CreateView<MenuView>(UI_PREFAB_MENU_NAME);
+    }
     private void OnStartPlay()
     {
         GameManager.Instance.SetGameState(GameState.PLAY);

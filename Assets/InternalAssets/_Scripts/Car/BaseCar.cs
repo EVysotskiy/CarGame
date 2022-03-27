@@ -25,7 +25,6 @@ public abstract class BaseCar : MonoBehaviour, ICar
     public BaseCar()
     {
         _driveCoroutine = DriveCoroutine();
-        _transform = this.transform;
     }
     public virtual void Drive()
     {

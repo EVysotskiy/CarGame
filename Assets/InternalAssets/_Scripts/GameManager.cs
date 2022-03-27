@@ -29,17 +29,19 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
-        _context = new Context(this);
+        CreateContext();
         InitializedMenu();
         InitializedPlayer();
 
     }
 
+    private void CreateContext()
+    {
+        _context = new Context(this);
+    }
     private void InitializedMenu ()
     {
-        _menuController = new MenuController(
-            Instantiate(PrefabManager.PrefabManager.GetPrefabByName(MenuController.UI_PREFAB_MENU_NAME))
-                .GetComponent<MenuView>());
+        _menuController = new MenuController(_context);
     }
 
     private void InitializedPlayer()

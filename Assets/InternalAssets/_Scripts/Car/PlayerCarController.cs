@@ -8,20 +8,18 @@ public enum TypeTurn
     Left,
     Right
 }
-public class PlayerCarController : ICar
+public class PlayerCarController : Window<PlayerCarView>
 {
     private PlayerCarView _playerCarView;
-    private IContext _context;
     private const string PREFAB_PLAYER_NAME = "PlayerCar";
-    public PlayerCarController(IContext context)
+    public PlayerCarController(IContext context) : base(context)
     {
-        _context = context;
         Initialized();
     }
 
     private void Initialized()
     {
-        _playerCarView = _context.InstanceView(PREFAB_PLAYER_NAME).GetComponent<PlayerCarView>();
+        _playerCarView = CreateView<PlayerCarView>(PREFAB_PLAYER_NAME);
     }
 
     public void Drive()
