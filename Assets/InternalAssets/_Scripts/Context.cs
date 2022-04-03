@@ -10,7 +10,7 @@ public class Context : MonoBehaviour,IContext
     {
         Current = monoBehaviour;
     }
-
+    
     public GameObject InstanceView(string prefabName)
     {
         return Instantiate(PrefabManager.PrefabManager.GetPrefabByName(prefabName));

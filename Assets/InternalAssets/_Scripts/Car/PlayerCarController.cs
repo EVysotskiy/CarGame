@@ -12,8 +12,9 @@ public class PlayerCarController : Window<PlayerCarView>
 {
     private PlayerCarView _playerCarView;
     private const string PREFAB_PLAYER_NAME = "PlayerCar";
-    public PlayerCarController(IContext context) : base(context)
+    public PlayerCarController(IContext context,OnStartPlayHandler startPlayEvent) : base(context)
     {
+        startPlayEvent += StartGameSession;
         Initialized();
     }
 
@@ -22,6 +23,11 @@ public class PlayerCarController : Window<PlayerCarView>
         _playerCarView = CreateView<PlayerCarView>(PREFAB_PLAYER_NAME);
     }
 
+    private void StartGameSession()
+    {
+       
+    }
+    
     public void Drive()
     {
         throw new System.NotImplementedException();
