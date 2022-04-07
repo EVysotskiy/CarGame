@@ -20,9 +20,9 @@ public class @TouchControlls : IInputActionCollection, IDisposable
             ""actions"": [
                 {
                     ""name"": ""TouchInput"",
-                    ""type"": ""Value"",
+                    ""type"": ""Button"",
                     ""id"": ""f478aaa7-e683-4d39-bd6c-dd988211bd08"",
-                    ""expectedControlType"": ""Touch"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -31,7 +31,7 @@ public class @TouchControlls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ea6d2216-0704-40ce-9b63-20f78970df33"",
-                    ""path"": ""<Touchscreen>/primaryTouch/tap"",
+                    ""path"": ""<Touchscreen>/press"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

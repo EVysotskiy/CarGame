@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfcedd8933c78aa47935354bcbd0e12f, type: 3}
+  m_Name: Pickup
+  m_EditorClassIdentifier: 
+  _materials:
+  - {fileID: 2100000, guid: 60bcfd51d8bfeba47b2012cc604195e3, type: 2}
+  - {fileID: 2100000, guid: c61d667ab31c5a84db824d59d0fa86d7, type: 2}
+  - {fileID: 2100000, guid: 2f1eaa18358c5a740b06ca4f0f63168f, type: 2}
+  _prefab: {fileID: 1056628912126504076, guid: 0463235f3ce2c8f419d96b14e73dfce5, type: 3}

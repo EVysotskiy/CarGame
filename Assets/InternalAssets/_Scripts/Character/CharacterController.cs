@@ -19,13 +19,13 @@ public class CharacterController : Window<CharacterView>
     public CharacterController(IContext context) : base(context)
     {
         Initialized();
-        GameManager.Instance.TouchHandler.SubscribeTouchScreen(OnTouchScreen);
+        GameManager.Instance.TouchHandler.SubscribeTouchScreen(OnTouchScreen,OnStopedTouchScreen);
     }
 
     private void Initialized()
     {
         _characterViews = new List<CharacterView>();
-        for (int i = 0; i < 100000; i++)
+        for (int i = 0; i < 100; i++)
         {
             _characterViews.Add(CreateView<CharacterView>(PREFAB_CHARACTER_NAME).GetComponent<CharacterView>());
         }
@@ -50,15 +50,14 @@ public class CharacterController : Window<CharacterView>
 
     private void OnTouchScreen(InputAction.CallbackContext callbackContext)
     {
-        if (GameManager.Instance.gameState is GameState.PLAY == false) { return;}
-        
-        if (CharacterActionType is CharacterActionType.Runs)
-        {
-            Stand();
-            return;
-        }
+        if (GameManager.Instance.gameState is GameState.PLAY is false) { return;}
         
         Run();
+    }
+
+    private void OnStopedTouchScreen(InputAction.CallbackContext callbackContext)
+    {
+        Stand();
     }
     private void RunOrStandAll(CharacterActionType actionType)
     {
@@ -79,6 +78,6 @@ public class CharacterController : Window<CharacterView>
 
     ~CharacterController()
     {
-        GameManager.Instance.TouchHandler.UnsubscribeTouchScreen(OnTouchScreen);
+        GameManager.Instance.TouchHandler.UnsubscribeTouchScreen(OnTouchScreen,OnStopedTouchScreen);
     }
 }

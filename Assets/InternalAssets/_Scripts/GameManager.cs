@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using InternalAssets._Scripts.Car;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -6,13 +8,15 @@ public enum GameState { INTRO, MENU,PLAY }
 public delegate void OnStateChangeHandler();
 public class GameManager : MonoBehaviour
 {
+    [SerializeField][Space]
+    private List<CarData> _carDatas;
     protected GameManager(){}
     private static GameManager _instance = null;
     private Context _context;
     public event OnStateChangeHandler OnStateChange;
     public event OnStartPlayHandler OnStartPlay;
     private MenuController _menuController;
-    private PlayerCarController _playerCarController;
+    private CarController _carController;
     private CharacterController _characterController; 
     public TouchHandler TouchHandler { get; private set; }
     public GameState gameState { get; private set; }
@@ -38,23 +42,28 @@ public class GameManager : MonoBehaviour
         InitializedTouchHandler();
         InitializedMenu();
         InitializedPlayer();
+        InitializedCar();
     }
 
     private void InitializedTouchHandler()
     {
         TouchHandler = gameObject.AddComponent<TouchHandler>();
-        TouchHandler.SubscribeTouchScreen(OnTouchScreen);
+        TouchHandler.SubscribeTouchScreen(OnTouchScreen,OnStopedTouchScreen);
     }
     
     private void CreateContext()
     {
         _context = new Context(this);
     }
-    private void InitializedMenu ()
+    private void InitializedMenu()
     {
         _menuController = new MenuController(_context);
     }
 
+    private void InitializedCar()
+    {
+        _carController = new CarController(_context, _carDatas);
+    }
     private void InitializedPlayer()
     {
         _characterController = new CharacterController(_context);
@@ -80,6 +89,11 @@ public class GameManager : MonoBehaviour
 
     private void OnTouchScreen(InputAction.CallbackContext callbackContext)
     {
-        
+        Debug.Log("OnTouchScreen");
+    }
+
+    private void OnStopedTouchScreen(InputAction.CallbackContext callbackContext)
+    {
+        Debug.Log("OnStopedTouchScreen");
     }
 }
