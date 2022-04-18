@@ -11,7 +11,8 @@ public class CarData : ScriptableObject
    public CarView GetNewCar()
    {
       var newCar = Instantiate(_prefab);
-      newCar.AddComponent<CarView>();
-      return newCar.GetComponent<CarView>();
+      var carView =  newCar.AddComponent<CarView>();
+      carView.SetMaterials(_materials);
+      return carView;
    }
 }

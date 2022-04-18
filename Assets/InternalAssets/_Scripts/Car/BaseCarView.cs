@@ -7,14 +7,14 @@ using UnityEngine;
 public abstract class BaseCarView : MonoBehaviour,ICar
 {
     protected Transform _transform;
-    public DriveType DriveType { get; }
+    protected DriveType _driveType;
     public float Speed { get => _speed; }
     private float _speed;
     private void Update()
     {
         _transform.Translate(Vector3.back * Time.deltaTime * _speed);
     }
-
+    
     public void SetSpeed(float newSpeed)
     {
         if (newSpeed < 0)

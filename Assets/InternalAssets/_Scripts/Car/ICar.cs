@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+using DriveType = InternalAssets._Scripts.Car.DriveType;
 
 public interface ICar
 {
-    DriveType DriveType { get;}
     float Speed { get; }
     void SetRandomMaterial();
 }

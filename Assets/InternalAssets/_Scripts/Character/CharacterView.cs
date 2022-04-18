@@ -11,7 +11,7 @@ public sealed class CharacterView : BaseCharacter
     private const string IS_RUN_PARAMETR_ANIMATOR = "isRun";
     private Coroutine _movementCoroutine;
     private Transform _transform;
-    private float _speed = 0.03f;
+    private float _speed = 0.3f;
 
     private void Awake()
     {
@@ -71,5 +71,9 @@ public sealed class CharacterView : BaseCharacter
             yield return null;
         }
     }
-    
+
+    private void OnCollisionEnter(Collision other)
+    {
+        Debug.Log("OnCollisionEnter Character");
+    }
 }

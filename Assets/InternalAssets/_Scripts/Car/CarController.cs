@@ -22,7 +22,7 @@ namespace InternalAssets._Scripts.Car
         
         private IEnumerator SpawnCar()
         {
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var newCar = _carDatas[Random.Range(0, _carDatas.Count)].GetNewCar();
                 newCar.SetSpeed(10f);
