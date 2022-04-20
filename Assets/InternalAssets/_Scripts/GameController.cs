@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private Canvas _menu;
-    [SerializeField] private Canvas _losePanel;
+    [SerializeField] private GameObject _menu;
+    [SerializeField] private GameObject _losePanel;
     [SerializeField] private Text _recordText;
     [HideInInspector] private int _record = 0;
 
@@ -49,7 +49,7 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         ResetRecord(0);
-        _menu.enabled = false;
+        _menu.SetActive(false);
         eventStart?.Invoke();
         directionTurn.SetTurn(_imageDirectTurn);
     }
@@ -57,12 +57,12 @@ public class GameController : MonoBehaviour
     public void LoseGame()
     {
         eventLose?.Invoke();
-        _losePanel.enabled = true;
+        _losePanel.SetActive(true);
     }
 
     public void ContinuePlaying()
     {
-        _losePanel.enabled = false;
+        _losePanel.SetActive(false);
         trafficAIController.speedCarTraffic = 10f;
         eventContinue?.Invoke();
     }
@@ -82,8 +82,8 @@ public class GameController : MonoBehaviour
         }
         ResetRecord(Record.GetRecord());
         trafficAIController.ResetSpeed();
-        _menu.enabled = true;
-        _losePanel.enabled = false;
+        _menu.SetActive(true);
+        _losePanel.SetActive(false);
     }
 }
 
