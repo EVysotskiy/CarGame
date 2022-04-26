@@ -8,8 +8,7 @@ public class TrafficAIController : MonoBehaviour
     [SerializeField] private GameController _gameController;
    [Tooltip("Скорость потока")] [Range(0f,50f)] public float speedCarTraffic;
     public List<Material> materialsCarsTraffic;
-
-
+    
     public Material GetRandomMaterialCar() => 
         materialsCarsTraffic[Random.Range(0, materialsCarsTraffic.Count)];
 

@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using InternalAssets._Scripts.Monetization.Ads;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class GameController : MonoBehaviour
 {
@@ -9,10 +12,11 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _losePanel;
     [SerializeField] private Text _recordText;
     [HideInInspector] private int _record = 0;
-
     public int record { get {return _record; } }
     public Image _imageDirectTurn;
     public TrafficAIController trafficAIController;
+    private TypeAds _typeAds;
+    public TypeAds TypeAds {get => _typeAds;}
     [SerializeField] private Sprite[] _imageDirectionalTurn = new Sprite[2];
     public delegate void GameHandler();
     public event GameHandler eventStart;
@@ -20,27 +24,67 @@ public class GameController : MonoBehaviour
     public event GameHandler eventContinue;
     public event GameHandler eventFinish;
     internal DirectionTurn directionTurn;
-    private Ads c_AdsUnity;
-    private Ads c_AdsGoogle;
+    private AdsController _adsController;
+    public IContext Context
+    {
+        get => _context;
+    }
+    
+    private IContext _context;
+    private static GameController _instance;
     [HideInInspector] public GameObject coliderCar { get; private set; }
+
+    public static GameController Instance
+    {
+        get
+        {
+            if (GameController._instance == null)
+            {
+                GameController._instance = new GameController();
+            }
+
+            return _instance;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        _instance._context.Current.StopAllCoroutines();
+    }
+
+    public void SetTypeAds(TypeAds typeAds)
+    {
+        _typeAds = typeAds;
+    }
+
+    private void Awake()
+    {
+        _instance = this;
+    }
+
     private void Start()
     {
-        SetVsync1();
-        //Application.targetFrameRate = -1;
-        ResetRecord(Record.GetRecord());
-        c_AdsGoogle = new Ads(new GoogleAds());
-        c_AdsUnity = new Ads(new UnityAds());
+        InitializeContext();
+        SetRecordPoint(Record.GetRecord());
         directionTurn = new DirectionTurn(_imageDirectionalTurn);
-        //Application.targetFrameRate = 30;
+        InitializeAdsController();
     }
-    public void SetVsync1() { QualitySettings.vSyncCount = 0; Application.targetFrameRate = -1; }
     public void UpdateRecord(int stepRecord)
     {
         _record += stepRecord;
         _recordText.text = string.Format ("{0}",_record);
     }
 
-    public void ResetRecord(int value)
+    private void InitializeContext()
+    {
+        _context = new Context(this);
+    }
+    private void InitializeAdsController()
+    {
+        _adsController = new AdsController(_context);
+    }
+
+    public void SetRecordPoint(int value)
     {
         _record = value;
         _recordText.text = string.Format("{0}", _record);
@@ -48,7 +92,7 @@ public class GameController : MonoBehaviour
 
     public void StartGame()
     {
-        ResetRecord(0);
+        SetRecordPoint(0);
         _menu.SetActive(false);
         eventStart?.Invoke();
         directionTurn.SetTurn(_imageDirectTurn);
@@ -62,6 +106,7 @@ public class GameController : MonoBehaviour
 
     public void ContinuePlaying()
     {
+        _adsController.ShowAdd();
         _losePanel.SetActive(false);
         trafficAIController.speedCarTraffic = 10f;
         eventContinue?.Invoke();
@@ -80,7 +125,7 @@ public class GameController : MonoBehaviour
         {
             Record.SaveRecord(_record);
         }
-        ResetRecord(Record.GetRecord());
+        SetRecordPoint(Record.GetRecord());
         trafficAIController.ResetSpeed();
         _menu.SetActive(true);
         _losePanel.SetActive(false);
