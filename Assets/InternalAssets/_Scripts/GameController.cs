@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using InternalAssets._Scripts.Monetization.Ads;
+using InternalAssets._Scripts.UI.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -25,6 +26,8 @@ public class GameController : MonoBehaviour
     public event GameHandler eventFinish;
     internal DirectionTurn directionTurn;
     private AdsController _adsController;
+    private SettingsController _settingsController;
+    private Coroutine _coroutineOpenPanelLoseGame;
     public IContext Context
     {
         get => _context;
@@ -47,6 +50,7 @@ public class GameController : MonoBehaviour
         }
     }
 
+    
     private void OnDestroy()
     {
         _instance._context.Current.StopAllCoroutines();
@@ -79,6 +83,11 @@ public class GameController : MonoBehaviour
     {
         _context = new Context(this);
     }
+
+    public void ShowSettings()
+    {
+        _settingsController = new SettingsController(_context);
+    }
     private void InitializeAdsController()
     {
         _adsController = new AdsController(_context);
@@ -100,10 +109,20 @@ public class GameController : MonoBehaviour
 
     public void LoseGame()
     {
+        _coroutineOpenPanelLoseGame = _context.Current.StartCoroutine(ShowLosePanel());
         eventLose?.Invoke();
-        _losePanel.SetActive(true);
+
     }
 
+    private IEnumerator ShowLosePanel()
+    {
+        while (_losePanel.activeSelf is false)
+        {
+            yield return new WaitForSeconds(1f);
+            _losePanel.SetActive(true);
+        }
+        yield break;
+    }
     public void ContinuePlaying()
     {
         _adsController.ShowAdd();
@@ -182,54 +201,17 @@ class DirectionTurn
         image.sprite = _imageDirectionalTurn[directionTurn];
     }
 }
-
-interface IAds
-{
-    void MoveAds();
-}
-
-class UnityAds: IAds
-{
-    public void MoveAds()
-    {
-
-    }
-}
-
-class GoogleAds : IAds
-{
-    public void MoveAds()
-    {
-
-    }
-}
-
-class Ads
-{
-    public IAds iAds { get; set; }
-
-    public Ads(IAds iAds)
-    {
-        this.iAds = iAds;
-    }
-
-    public void MoveAds()
-    {
-        iAds.MoveAds();
-    }
-}
-
 public static class Record
 {
 
     public static void SaveRecord(int record)
     {
-        SPlayerPrefs.SetInt("record", record);
+        PlayerPrefsUtils.SetInt("record", record);
     }
 
     public static int GetRecord()
     {
-        return SPlayerPrefs.GetInt("record");
+        return PlayerPrefsUtils.GetInt("record");
     }
 
 }

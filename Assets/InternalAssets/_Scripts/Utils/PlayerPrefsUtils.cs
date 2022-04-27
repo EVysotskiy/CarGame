@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Security.Cryptography;
 using System.Text;
 
-public class SPlayerPrefs
+public static class PlayerPrefsUtils
 {
 
     public static void SetString(string key, string value)
@@ -56,7 +57,22 @@ public class SPlayerPrefs
         return GetInt(key, 0);
     }
 
+    public static void SetBool(string key, bool value)
+    {
+        SetString(key, value.ToString());
+    }
 
+    public static bool GetBool(string key)
+    {
+        var value = GetString(key);
+        if (string.IsNullOrEmpty(value))
+        {
+            SetBool(key,false);
+            return false;
+        }
+        var result = Convert.ToBoolean(value);
+        return result;
+    }
     public static void SetFloat(string key, float value)
     {
         PlayerPrefs.SetString(md5(key), encrypt(value.ToString()));
@@ -103,10 +119,7 @@ public class SPlayerPrefs
     {
         PlayerPrefs.Save();
     }
-
-    /*
-	 * Обязательно смените этот секретный код и числа в массивах
-	 */
+    
     private static string secretKey = "secret";
     private static byte[] key = new byte[8] { 22, 41, 18, 47, 38, 217, 65, 64 };
     private static byte[] iv = new byte[8] { 34, 68, 46, 43, 50, 87, 2, 105 };

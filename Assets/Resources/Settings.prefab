@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1028125710843475355}
   - component: {fileID: 1028125710843475354}
   - component: {fileID: 1028125710843475353}
+  - component: {fileID: 2922736317481278742}
   m_Layer: 8
   m_Name: Settings
   m_TagString: Untagged
@@ -99,6 +100,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2922736317481278742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028125710843475352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2501661b9a08cc5459b05edc3b0fed31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundOn: {fileID: 21300000, guid: 5a33209b4031643409f8acd78b131fc4, type: 3}
+  _soundOff: {fileID: 21300000, guid: ccad4364bf03d554eb280f242e1e34ee, type: 3}
+  _imageSoundState: {fileID: 1028125712503849193}
 --- !u!1 &1028125711088123750
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +206,7 @@ GameObject:
   - component: {fileID: 1028125711269828591}
   - component: {fileID: 1028125711269828590}
   m_Layer: 8
-  m_Name: switch_state_sound_btn (1)
+  m_Name: info_btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -533,4 +549,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1028125712503849193}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2922736317481278742}
+        m_TargetAssemblyTypeName: SettingsView, Assembly-CSharp
+        m_MethodName: SwitchSoundState
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
