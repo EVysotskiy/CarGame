@@ -52,6 +52,7 @@ public class PlayerCar : MonoBehaviour
         playerCar.GetComponent<BoxCollider>().enabled = false;
         playerCar.GetComponent<Animator>().SetFloat("SpeedAnimation", 0);
         ShowExplosion();
+        GameController.Instance.OnCrashed();
     }
 
     private IEnumerator  DravingCar()

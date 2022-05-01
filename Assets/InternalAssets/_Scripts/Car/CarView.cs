@@ -8,7 +8,6 @@ namespace InternalAssets._Scripts.Car
     public class CarView:BaseCarView
     {
         private List<Material> _materials;
-        private Rigidbody _rigidbody;
         private MeshRenderer _meshRenderer;
         private void Awake()
         {

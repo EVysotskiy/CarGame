@@ -1,5 +1,4 @@
 ﻿using InternalAssets._Scripts.Monetization.Ads;
-using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.Advertisements;
 

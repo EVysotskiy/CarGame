@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.iOS;
 using UnityEngine;
 
 public class Context : MonoBehaviour,IContext
@@ -15,6 +16,4 @@ public class Context : MonoBehaviour,IContext
     {
         return Instantiate(PrefabManager.PrefabManager.GetPrefabByName(prefabName));
     }
-    
-    
 }

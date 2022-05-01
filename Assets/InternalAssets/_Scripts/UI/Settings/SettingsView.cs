@@ -19,12 +19,14 @@ public class SettingsView : MonoBehaviour
         var canvas = GetComponent<Canvas>(); 
         canvas.worldCamera = Camera.main;
         canvas.planeDistance = 30;
+        RenderImageSoundState();
     }
 
     public void SwitchSoundState()
     {
         SetSoundState(!_isSound);
         RenderImageSoundState();
+        GameController.Instance.OnClickButton();
 
     }
 
@@ -32,6 +34,7 @@ public class SettingsView : MonoBehaviour
     {
         _isSound = isSound;
         PlayerPrefsUtils.SetBool(SOUND_KEY,isSound);
+        GameController.Instance.OnEditStateSound();
     }
 
     private void RenderImageSoundState()
@@ -48,14 +51,17 @@ public class SettingsView : MonoBehaviour
     public void OpenInfoPanel()
     {
         _infoPane.SetActive(true);
+        GameController.Instance.OnClickButton();
     }
 
     public void CloseInfoPanel()
     {
+        GameController.Instance.OnClickButton();
         _infoPane.SetActive(false);
     }
     public void Close()
     {
+        GameController.Instance.OnClickButton();
         Destroy(gameObject);
     }
 }

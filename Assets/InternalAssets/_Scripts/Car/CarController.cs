@@ -8,13 +8,19 @@ namespace InternalAssets._Scripts.Car
     {
         private List<CarData> _carDatas;
         private List<CarView> _carViews;
-        public CarController(IContext context,List<CarData> carDatas) : base(context)
+        private const string NAME_CAR_DATA_RESOURCES = "car/carDate/Car";
+        public CarController(IContext context) : base(context)
         {
-            _carDatas = new List<CarData>(carDatas);
-            Initialized();
+            InitialezeCarDatas();
+            InitializedSpawnCar();
         }
 
-        private void Initialized()
+        private void InitialezeCarDatas()
+        {
+            var carData = GetCarResourcesByName(NAME_CAR_DATA_RESOURCES);
+            _carDatas.Add(carData);
+        }
+        private void InitializedSpawnCar()
         {
             _carViews = new List<CarView>();
             _context.Current.StartCoroutine(SpawnCar());

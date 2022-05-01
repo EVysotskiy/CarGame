@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using InternalAssets._Scripts.Audio;
+using InternalAssets._Scripts.Car;
 using InternalAssets._Scripts.Monetization.Ads;
 using InternalAssets._Scripts.UI.Settings;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
+
+public delegate void SoundHandler();
 public class GameController : MonoBehaviour
 {
     [SerializeField] private GameObject _menu;
@@ -17,6 +22,9 @@ public class GameController : MonoBehaviour
     public Image _imageDirectTurn;
     public TrafficAIController trafficAIController;
     private TypeAds _typeAds;
+    public  event SoundHandler OnClickBottonUI;
+    public  event SoundHandler OnPlayerTurn;
+    
     public TypeAds TypeAds {get => _typeAds;}
     [SerializeField] private Sprite[] _imageDirectionalTurn = new Sprite[2];
     public delegate void GameHandler();
@@ -28,6 +36,8 @@ public class GameController : MonoBehaviour
     private AdsController _adsController;
     private SettingsController _settingsController;
     private Coroutine _coroutineOpenPanelLoseGame;
+    private AudioController _audioController;
+    private CarController _carController;
     public IContext Context
     {
         get => _context;
@@ -72,6 +82,24 @@ public class GameController : MonoBehaviour
         SetRecordPoint(Record.GetRecord());
         directionTurn = new DirectionTurn(_imageDirectionalTurn);
         InitializeAdsController();
+        InitializeAudio();
+        OnPlayerTurn += OnTurnPlayerCar;
+        OnClickBottonUI += OnClickButton;
+    }
+
+    public void OnClickButton()
+    {
+        _audioController.OnClick();
+    }
+
+    private void InitializeCarController()
+    {
+        _carController = new CarController(_context);
+    }
+    
+    public void OnTurnPlayerCar()
+    {
+        _audioController.OnTurn();
     }
     public void UpdateRecord(int stepRecord)
     {
@@ -79,6 +107,10 @@ public class GameController : MonoBehaviour
         _recordText.text = string.Format ("{0}",_record);
     }
 
+    private void InitializeAudio()
+    {
+        _audioController = new AudioController(_context);
+    }
     private void InitializeContext()
     {
         _context = new Context(this);
@@ -87,12 +119,17 @@ public class GameController : MonoBehaviour
     public void ShowSettings()
     {
         _settingsController = new SettingsController(_context);
+        OnClickButton();
     }
     private void InitializeAdsController()
     {
         _adsController = new AdsController(_context);
     }
 
+    public void OnCrashed()
+    {
+        _audioController.OnCrashed();
+    }
     public void SetRecordPoint(int value)
     {
         _record = value;
@@ -105,6 +142,7 @@ public class GameController : MonoBehaviour
         _menu.SetActive(false);
         eventStart?.Invoke();
         directionTurn.SetTurn(_imageDirectTurn);
+        _audioController.OnClick();
     }
 
     public void LoseGame()
@@ -114,6 +152,11 @@ public class GameController : MonoBehaviour
 
     }
 
+
+    public void OnEditStateSound()
+    {
+        _audioController.OnEditState();
+    }
     private IEnumerator ShowLosePanel()
     {
         while (_losePanel.activeSelf is false)
@@ -128,6 +171,7 @@ public class GameController : MonoBehaviour
         _adsController.ShowAdd();
         _losePanel.SetActive(false);
         trafficAIController.speedCarTraffic = 10f;
+        OnClickButton();
         eventContinue?.Invoke();
     }
 
@@ -148,6 +192,7 @@ public class GameController : MonoBehaviour
         trafficAIController.ResetSpeed();
         _menu.SetActive(true);
         _losePanel.SetActive(false);
+        OnClickButton();
     }
 }
 

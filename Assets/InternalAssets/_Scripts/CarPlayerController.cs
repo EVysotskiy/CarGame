@@ -118,12 +118,18 @@ public class CarPlayerController : MonoBehaviour,IPointerClickHandler
         Destroy(carPlayer);
     }
 
-    private void TurnRight() =>
+    private void TurnRight()
+    {
         carPlayer.GetComponent<Animator>().SetBool("RightTurn", true);
+        GameController.Instance.OnTurnPlayerCar();
+    }
 
 
-    private void TurnLeft() =>
+    private void TurnLeft()
+    {
         carPlayer.GetComponent<Animator>().SetBool("LeftTurn", true);
+        GameController.Instance.OnTurnPlayerCar();
+    }
 
     private void Start()
     {

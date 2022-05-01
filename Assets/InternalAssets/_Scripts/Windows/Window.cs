@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.iOS;
 using UnityEngine;
 
 public abstract class Window<T>
@@ -36,6 +37,11 @@ public abstract class Window<T>
     ) where T : MonoBehaviour
     {
         return instance.GetComponent<T>();
+    }
+
+    public CarData GetCarResourcesByName(string name)
+    {
+        return Resources.Load<CarData>(name);
     }
 
 }
