@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using InternalAssets._Scripts.Car;
+﻿using InternalAssets._Scripts.Car;
 using UnityEngine;
 
 public class RoadPoint : MonoBehaviour

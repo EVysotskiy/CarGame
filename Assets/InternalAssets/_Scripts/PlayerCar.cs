@@ -12,7 +12,7 @@ public class PlayerCar : MonoBehaviour
     private ParticleSystem _particleSystem;
     private Transform _transform;
     private Vector3 _vector3Forward = new Vector3(0, 0, -1);
-
+    public bool isColision = false;
     private void Awake()
     {
         _particleSystem = this.GetComponentInChildren<ParticleSystem>();
@@ -37,35 +37,36 @@ public class PlayerCar : MonoBehaviour
     
     public void AnimationTurnExit()
     {
-        if (gameObject.GetComponent<BoxCollider>().enabled)
-        {
-            _transform = gameObject.transform;
-            StartCoroutine(DravingCar());
-            gameObject.GetComponent<Animator>().enabled = false;
-            gameObject.GetComponent<BoxCollider>().enabled = false;
-        }
-    }
-   
-    public void CollidedCar()
-    {
-        GameObject playerCar = gameObject;
-        playerCar.GetComponent<BoxCollider>().enabled = false;
-        playerCar.GetComponent<Animator>().SetFloat("SpeedAnimation", 0);
-        ShowExplosion();
-        GameController.Instance.OnCrashed();
+        if (isColision) return;
+        _transform = gameObject.transform; 
+        _transform.GetComponent<Animator>().enabled = false;
+        _transform.GetComponent<BoxCollider>().enabled = false;
+        Destroy(_transform.GetComponent<Rigidbody>());
+        GameController.Instance.OnEndTurn();
+        GameController.Instance.OnDestroyPlayerCar(gameObject);
+        DestroyPlayerCar();
     }
 
-    private IEnumerator  DravingCar()
+    private void DestroyPlayerCar()
     {
-        while (true)
-        {
-            _transform.Translate(_vector3Forward * Time.deltaTime* speedCar);
-            if (_transform.position.x > 120f || _transform.position.x < -30f)
-            {
-                Destroy(gameObject);
-            }
-            yield return new WaitForFixedUpdate();
-        }
-       
+        Destroy(gameObject.GetComponent<PlayerCar>());
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        CollidedCar();
+    }
+
+    public void CollidedCar()
+    {
+        if (transform.GetComponent<BoxCollider>().enabled)
+        {
+            isColision = true;
+            transform.GetComponent<BoxCollider>().enabled = false;
+            transform.GetComponent<Animator>().SetFloat("SpeedAnimation", 0);
+            ShowExplosion();
+            GameController.Instance.OnCrashed();
+        }
+    }
+    
 }

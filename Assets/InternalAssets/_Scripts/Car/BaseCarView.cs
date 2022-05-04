@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using DriveType = InternalAssets._Scripts.Car.DriveType;
 
@@ -10,11 +7,8 @@ public abstract class BaseCarView : MonoBehaviour,ICar
     protected Transform _transform;
     protected DriveType _driveType;
     public float Speed { get => _speed; }
-    private float _speed;
-    private void Update()
-    {
-        _transform.Translate(Vector3.back * Time.deltaTime * _speed);
-    }
+
+    protected float _speed;
     
     public void SetSpeed(float newSpeed)
     {

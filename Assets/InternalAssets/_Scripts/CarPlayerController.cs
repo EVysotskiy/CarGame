@@ -19,30 +19,20 @@ public class CarPlayerController : MonoBehaviour,IPointerClickHandler
         {
             SetSpeedAnimation(carPlayer.GetComponent<Animator>(), gameController.record * 0.001f);
             TurnCarPlayer();
+            carPlayer.GetComponent<PlayerCar>().isColision = false;
             _isPlay = false;
-            StartCoroutine(IsEndTurn(carPlayer.GetComponent<Animator>()));
         }
     }
-
-
-    public IEnumerator IsEndTurn(Animator animator)
+    
+    public void OnEndTurn()
     {
-        
-        while (true)
-        {
-            if(animator.enabled == false)
-            {
-                CreateNewCarPlayer();
-                SetAnimatorStart(true);
-                _isPlay = true;
-                gameController.UpdateRecord(1);
-                gameController.trafficAIController.UpSpeed();
-                StopAllCoroutines();
-                yield break;
-            }
-            yield return new WaitForFixedUpdate();
-        }
+        CreateNewCarPlayer();
+        SetAnimatorStart(true);
+        _isPlay = true;
+        gameController.UpdateRecord(1);
+        gameController.trafficAIController.UpSpeed();
     }
+    
     private void TurnCarPlayer()
     {
         carPlayer.GetComponent<PlayerCar>().speedCar = gameController.trafficAIController.speedCarTraffic;
@@ -59,7 +49,7 @@ public class CarPlayerController : MonoBehaviour,IPointerClickHandler
 
     private void CreateNewCarPlayer()
     {
-        gameController.directionTurn.SetTurn(gameController._imageDirectTurn);
+        /*gameController.directionTurn.SetTurn(gameController._imageDirectTurn);*/
         carPlayer = Instantiate(_carPlayerPrefabs);
         
     }
@@ -70,8 +60,6 @@ public class CarPlayerController : MonoBehaviour,IPointerClickHandler
     public void LosePlay()
     {
         _isPlay = false;
-        DestroyCurrentCar();
-        carPlayer = gameController.GetColiderCarPlayer();
     }
     private void StartGameCar()
     {
@@ -105,14 +93,7 @@ public class CarPlayerController : MonoBehaviour,IPointerClickHandler
             animator.SetFloat("SpeedAnimation", 1+speed);
         }
     }
-
-    private void DestroyCurrentCar()
-    {
-        if (gameController.GetColiderCarPlayer() != carPlayer)
-        {
-            Destroy(carPlayer);
-        }
-    }
+    
     private void DestroyCurrentCar(ref GameObject carPlayer)
     {
         Destroy(carPlayer);

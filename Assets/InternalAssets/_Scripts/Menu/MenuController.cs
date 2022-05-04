@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class MenuController : Window<MenuView>
+﻿public class MenuController : Window<MenuView>
 {
     private MenuView _menuView;
     public const string UI_PREFAB_MENU_NAME = "MenuView";

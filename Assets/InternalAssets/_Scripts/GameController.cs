@@ -17,6 +17,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _menu;
     [SerializeField] private GameObject _losePanel;
     [SerializeField] private Text _recordText;
+    [SerializeField] private CarPlayerController _carPlayerController;
     [HideInInspector] private int _record = 0;
     public int record { get {return _record; } }
     public Image _imageDirectTurn;
@@ -45,8 +46,6 @@ public class GameController : MonoBehaviour
     
     private IContext _context;
     private static GameController _instance;
-    [HideInInspector] public GameObject coliderCar { get; private set; }
-
     public static GameController Instance
     {
         get
@@ -81,6 +80,7 @@ public class GameController : MonoBehaviour
         InitializeContext();
         SetRecordPoint(Record.GetRecord());
         directionTurn = new DirectionTurn(_imageDirectionalTurn);
+        InitializeCarController();
         InitializeAdsController();
         InitializeAudio();
         OnPlayerTurn += OnTurnPlayerCar;
@@ -92,6 +92,11 @@ public class GameController : MonoBehaviour
         _audioController.OnClick();
     }
 
+    public void OnEndTurn()
+    {
+        _carPlayerController.OnEndTurn();
+    }
+    
     private void InitializeCarController()
     {
         _carController = new CarController(_context);
@@ -100,6 +105,7 @@ public class GameController : MonoBehaviour
     public void OnTurnPlayerCar()
     {
         _audioController.OnTurn();
+        _carController.IncrementSpeed();
     }
     public void UpdateRecord(int stepRecord)
     {
@@ -126,9 +132,23 @@ public class GameController : MonoBehaviour
         _adsController = new AdsController(_context);
     }
 
+    public void OnDestroyPlayerCar(GameObject car)
+    {
+        if (directionTurn.directionTurn is "Left")
+        {
+            _carController.AddCarByGameobject(car.AddComponent<OncomingCarView>());
+        }
+        else
+        {
+            _carController.AddCarByGameobject(car.AddComponent<PassingCarView>());
+        }
+        directionTurn.SetTurn(_imageDirectTurn);
+    }
     public void OnCrashed()
     {
         _audioController.OnCrashed();
+        _carController.StopCars();
+        LoseGame();
     }
     public void SetRecordPoint(int value)
     {
@@ -141,12 +161,15 @@ public class GameController : MonoBehaviour
         SetRecordPoint(0);
         _menu.SetActive(false);
         eventStart?.Invoke();
+        _carController.StartCars();
         directionTurn.SetTurn(_imageDirectTurn);
         _audioController.OnClick();
+        _carController.SetStartSpeed();
     }
 
     public void LoseGame()
     {
+        Handheld.Vibrate();
         _coroutineOpenPanelLoseGame = _context.Current.StartCoroutine(ShowLosePanel());
         eventLose?.Invoke();
 
@@ -170,17 +193,10 @@ public class GameController : MonoBehaviour
     {
         _adsController.ShowAdd();
         _losePanel.SetActive(false);
-        trafficAIController.speedCarTraffic = 10f;
+        _carController.StartCars();
         OnClickButton();
         eventContinue?.Invoke();
     }
-
-    public void SetColiderCarPlayer(ref GameObject carPlayer) => 
-        coliderCar = carPlayer;
-
-    public GameObject GetColiderCarPlayer() => 
-        coliderCar;
-    
     public void FinishGame()
     {
         eventFinish?.Invoke();
@@ -231,7 +247,7 @@ class DirectionTurn
 
     public void SetDirectionTurn()
     {
-        if (Random.Range(-1, 2) > 0)
+        if (Random.Range(-1, 3) > 0)
         {
             directionTurn = "Left";
         }

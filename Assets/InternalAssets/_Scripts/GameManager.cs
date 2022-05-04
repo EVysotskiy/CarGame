@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 
     private void InitializedCar()
     {
-        _carController = new CarController(_context, _carDatas);
+        _carController = new CarController(_context);
     }
     
     public void SetGameState(GameState state)

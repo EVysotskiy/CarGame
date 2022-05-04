@@ -6,6 +6,7 @@ TagManager:
   tags:
   - GamingCar
   - OnComingGamingCar
+  - RoadPoint
   layers:
   - Default
   - TransparentFX

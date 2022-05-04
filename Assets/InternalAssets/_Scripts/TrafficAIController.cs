@@ -24,7 +24,6 @@ public class TrafficAIController : MonoBehaviour
     public void CollidedCar(GameObject playerCar)
     {
         speedCarTraffic = 0;
-        _gameController.SetColiderCarPlayer(ref playerCar);
         _gameController.LoseGame();
 
     } 

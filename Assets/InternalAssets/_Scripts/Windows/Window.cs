@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEditor.iOS;
 using UnityEngine;
 
 public abstract class Window<T>
