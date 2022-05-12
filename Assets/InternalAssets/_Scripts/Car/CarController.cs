@@ -94,7 +94,8 @@ namespace InternalAssets._Scripts.Car
         }
         private IEnumerator SpawnCar()
         {
-            for (int i = 0; i < 4; i++)
+            var countSpawnCar = Random.Range(4, 7);
+            for (int i = 0; i < countSpawnCar; i++)
             {
                 var newCar = _carDatas[Random.Range(0, _carDatas.Count)].GetNewCar();
                 newCar.SetSpeed(_currentSpeedCars);
