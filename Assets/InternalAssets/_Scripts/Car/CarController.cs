@@ -8,7 +8,7 @@ namespace InternalAssets._Scripts.Car
     {
         private List<CarData> _carDatas;
         private const float START_SPEED_CARS = 10f; 
-        private const float INCREMENT_SPEED_CARS = 0.5f;
+        private const float INCREMENT_SPEED_CARS = 0.2f;
         private List<CarView> _carViews;
         private List<IDrive> _drivesCar;
         private Coroutine _driveCoroutine;
@@ -22,6 +22,12 @@ namespace InternalAssets._Scripts.Car
             DriveCars();
         }
 
+        public void DestroyStartCar()
+        {
+            _drivesCar.ForEach(x => x.DestroyCar());
+            InitializedSpawnCar();
+        }
+        
         private void DriveCars()
         {
             _driveCoroutine = _context.Current.StartCoroutine(DriveCarEnumerator());
@@ -29,7 +35,10 @@ namespace InternalAssets._Scripts.Car
 
         public void AddCarByGameobject(IDrive car)
         {
-            car.isDestroy = true;
+            if (_drivesCar.Count > 5)
+            {
+                _drivesCar[Random.Range(0, _drivesCar.Count)].isDestroy = true;
+            }
             _drivesCar.Add(car);
             StartCars();
         }
@@ -63,6 +72,7 @@ namespace InternalAssets._Scripts.Car
         }
         public void SetSpeed(float newSpeed)
         {
+            _currentSpeedCars = newSpeed;
             _drivesCar.ForEach(carDrive =>
             {
                 carDrive.SetSpeed(newSpeed);
@@ -94,7 +104,7 @@ namespace InternalAssets._Scripts.Car
         }
         private IEnumerator SpawnCar()
         {
-            var countSpawnCar = Random.Range(4, 7);
+            var countSpawnCar = 3;
             for (int i = 0; i < countSpawnCar; i++)
             {
                 var newCar = _carDatas[Random.Range(0, _carDatas.Count)].GetNewCar();

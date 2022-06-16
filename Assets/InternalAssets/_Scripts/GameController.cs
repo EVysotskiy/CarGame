@@ -205,10 +205,12 @@ public class GameController : MonoBehaviour
             Record.SaveRecord(_record);
         }
         SetRecordPoint(Record.GetRecord());
-        trafficAIController.ResetSpeed();
+        _carController.SetStartSpeed();
+        _carController.StartCars();
         _menu.SetActive(true);
         _losePanel.SetActive(false);
         OnClickButton();
+        _carController.DestroyStartCar();
     }
 }
 

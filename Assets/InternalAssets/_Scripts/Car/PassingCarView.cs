@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class PassingCarView : CarView,IDrive
 {
+    
+    public void DestroyCar()
+    {
+        if (this != null)
+        {
+            Destroy(gameObject);
+            Destroy(this);
+        }
+    }
     public void Drive()
     {
         if (_transform == null)
@@ -18,7 +27,7 @@ public class PassingCarView : CarView,IDrive
     {
         if (isDestroy)
         {
-            Destroy(this);
+            Destroy(gameObject);
         }
         
         var roadPoint = other.transform.GetComponent<RoadPoint>();
@@ -28,8 +37,6 @@ public class PassingCarView : CarView,IDrive
         }
         MoveInStartPoint(roadPoint);
         SetRandomMaterial();
-        Debug.Log("OnTriggerEnter");
-            
     }
     
     private void MoveInStartPoint(RoadPoint roadTriggerPoint)
